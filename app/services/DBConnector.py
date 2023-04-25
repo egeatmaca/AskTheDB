@@ -21,7 +21,7 @@ class DBConnector():
         
         return schema
     
-    def cast_schema_to_string(self, schema: List[Dict[str, Dict[str, str]]]) -> str:
+    def schema_to_text(self, schema: List[Dict[str, Dict[str, str]]]) -> str:
         schema_str = ''
         for table_name, column_dict in schema.items():
             schema_str += f'{table_name} ('
@@ -30,9 +30,9 @@ class DBConnector():
             schema_str = schema_str[:-2] + '); '
         return schema_str
     
-    def read_schema_as_string(self) -> str:
+    def get_schema_text(self) -> str:
         schema = self.read_schema()
-        schema_str = self.cast_schema_to_string(schema)
-        return schema_str
+        schema_text = self.schema_to_text(schema)
+        return schema_text
 
     
