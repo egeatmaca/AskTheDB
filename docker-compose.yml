@@ -1,0 +1,10 @@
+services:
+  app:
+    build: .
+    image: app
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
