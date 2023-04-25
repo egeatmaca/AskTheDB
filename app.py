@@ -1,38 +1,41 @@
 import streamlit as st 
-from langchain.llms import OpenAI
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain, SequentialChain 
-from langchain.memory import ConversationBufferMemory
+import json
+from DBConnector import DBConnector
+from SQLTranslator import SQLTranslator
 
-# App framework
+# Set page config
 st.set_page_config(page_title='Ask The DB', page_icon='❓',
                    layout='centered', initial_sidebar_state='auto')
 
+# Set title
 st.title('❓ Ask The DB')
 
-st.write('Please use the following format for defining schemas:')
-st.write('< Table Name > ( < Column Name > , < Column Name > , ... ); ...')
-st.write('Example: Users (ID, Name, Email, Address); Orders (ID, User ID, Amount)')
+# Get db config file
+st.header('1. Configure the DB')
+db_config_file = st.file_uploader('Upload your database config file.', type='json')
 
-schema = st.text_input('What is the schema of related tables?')
-question = st.text_input('Ask your question to the database!')
+# If db config file is uploaded
+if db_config_file:
+    # Initialize db connector
+    db_config = json.load(db_config_file)
+    db_connector = DBConnector(**db_config)
 
-# Prompt templates
-sql_translation_template = PromptTemplate(
-    input_variables = ['schema', 'question'], 
-    template='''
-             My database has the following schema: {schema} \n \
-             I want to know the answer to the following question: {question}. \n \
-             Write a SQL query that will answer my question. \n \
-             Only return the sql query itself without any surrounding text.
-             '''
-)
+    # Get db schema and write it to the screen
+    schema_str = None
+    schema = db_connector.read_schema()
+    schema_str = db_connector.cast_schema_to_string(schema)
+    st.header('2. View the DB Schema (Optional)')
+    st.write('Schema of your database:')
+    st.json(schema, expanded=False)
 
-# Llms
-llm = OpenAI(temperature=0.5) 
-sql_translation_chain = LLMChain(llm=llm, prompt=sql_translation_template)
+    # Get question to the db
+    st.header('3. Ask the DB')
+    question = st.text_input('Ask a question to your database!')
 
-# Show stuff to the screen if there's a prompt
-if schema and question: 
-    sql_query = sql_translation_chain.run(schema=schema, question=question)
-    st.write(sql_query)
+    # If a question is entered
+    if question:
+        # Translate to sql, execute and show results
+        sql_query = SQLTranslator().translate(question, schema)
+        results = db_connector.execute_query(sql_query)
+        st.write('Results:')
+        st.dataframe(results)
