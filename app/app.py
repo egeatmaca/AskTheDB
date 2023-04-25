@@ -11,9 +11,14 @@ st.set_page_config(page_title='Ask The DB', page_icon='❓',
 st.title('❓ Ask The DB')
 
 # Get db config file
-st.header('1. Configure the DB')
-db_config_file = st.file_uploader('Upload your database config file.', type='json')
-
+db_config_file = None
+with st.expander('Step 1: Configure the DB', expanded=True):
+    db_config_file = st.file_uploader('Upload your database config file.', type='json')
+    st.write('For testing with mock data:')
+    with open('./sample_config.json', 'r') as sample_config_file:
+        st.download_button(label='Download sample config file', data=sample_config_file.read(),
+                        file_name='sample_config.json', mime='application/json')
+        
 # If db config file is uploaded
 if db_config_file:
     # Initialize db connector
@@ -24,13 +29,14 @@ if db_config_file:
     schema_str = None
     schema = db_connector.read_schema()
     schema_str = db_connector.cast_schema_to_string(schema)
-    st.header('2. View the DB Schema (Optional)')
-    st.write('Schema of your database:')
-    st.json(schema, expanded=False)
+    with st.expander('Step 2: View the DB Schema (Optional)'):
+        st.write('Schema of your database:')
+        st.json(schema, expanded=False)
 
     # Get question to the db
-    st.header('3. Ask the DB')
-    question = st.text_input('Ask a question to your database!')
+    question = None
+    with st.expander('Step 3: Ask the DB'):
+        question = st.text_input('Ask a question to your database!')
 
     # If a question is entered
     if question:

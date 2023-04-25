@@ -1,11 +1,32 @@
 services:
   app:
-    build: .
+    build: ./app
     image: app
     ports:
       - "8501:8501"
     volumes:
-      - .:/app
+      - ./app:/app
     env_file:
       - .env
-    network_mode: host
+    depends_on:
+      - sample_data
+
+  sample_data:
+    build: ./sample_data
+    image: sample_data
+    volumes:
+      - ./sample_data:/sample_data
+    env_file:
+      - .env
+    depends_on:
+      - sample_db
+
+  sample_db:
+    image: postgres:9.6
+    ports:
+      - "5432:5432"
+    volumes:
+      - sample_db_data:/var/lib/postgresql/data
+
+volumes:
+  sample_db_data:

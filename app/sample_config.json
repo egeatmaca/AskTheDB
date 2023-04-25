@@ -1,8 +1,8 @@
 {
     "dialect": "postgresql",
-    "host": "0.0.0.0",
+    "host": "sample_db",
     "port": 5432,
     "username": "postgres",
     "password": "postgres",
-    "database": "postgres"
+    "database": "sample_db"
 }
