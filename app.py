@@ -1,7 +1,7 @@
 import streamlit as st 
 import json
-from DBConnector import DBConnector
-from SQLTranslator import SQLTranslator
+from services.DBConnector import DBConnector
+from services.SQLTranslator import SQLTranslator
 
 # Set page config
 st.set_page_config(page_title='Ask The DB', page_icon='❓',
