@@ -27,7 +27,7 @@ class DBConnector():
             schema_str += f'{table_name} ('
             for column_name, column_type in column_dict.items():
                 schema_str += f'{column_name} {column_type}, '
-            schema_str = schema_str[:-2] + '); '
+            schema_str = schema_str[:-2] + ')\n'
         return schema_str
     
     def get_schema_text(self) -> str:

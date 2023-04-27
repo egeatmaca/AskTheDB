@@ -13,10 +13,10 @@ class SQLTranslator:
         self.template = PromptTemplate(
             input_variables=['question', 'schema'],
             template='''
-                    My database has the following schema: \n {schema} \n\n \
-                    I want to know the answer to the following question: {question}. \n \
-                    Write a SQL query that will answer my question. \n\n \
-                    Only return the sql query itself without any surrounding text.
+                    My SQL database has a schema with the following tables and fields: \n {schema} \n\n \
+                    I want to know: {question}. \n \
+                    Write a SQL query for what I want to know. \n\n \
+                    Return the SQL query in a code block.
                     '''
         )
 
