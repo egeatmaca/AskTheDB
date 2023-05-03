@@ -50,6 +50,8 @@ class App:
                 # Translate to sql, execute and show results
                 sql_query = self.sql_translator.translate(question, schema_text)
                 results = self.db_connector.execute_query(sql_query)
+                st.write('SQL Query:')
+                st.code(sql_query)
                 st.write('Results:')
                 st.dataframe(results)
         
