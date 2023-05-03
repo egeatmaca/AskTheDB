@@ -20,6 +20,7 @@ services:
       - .env
     depends_on:
       - sample_db
+    restart: on-failure
 
   sample_db:
     image: postgres:9.6
@@ -27,6 +28,8 @@ services:
       - "5432:5432"
     volumes:
       - sample_db_data:/var/lib/postgresql/data
+    env_file:
+      - .env
 
 volumes:
   sample_db_data:
