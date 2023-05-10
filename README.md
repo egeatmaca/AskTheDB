@@ -15,5 +15,6 @@ A natural language database query engine. Using AskTheDB, users can ask question
 
 ## Getting Started
 1. Clone the repository
-2. Run `docker compose up` in the root directory
-3. Open `localhost:8501` in your browser
+2. Copy `template.env` to `.env` and fill in the empty values 
+3. Run `docker compose up` in the root directory
+4. Open `localhost:8501` in your browser
